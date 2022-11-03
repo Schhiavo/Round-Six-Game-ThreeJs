@@ -23,6 +23,40 @@ loader.load("tree/scene.gltf", function(gltf){
     gltf.scene.position.set(0, -6, -2);
 })
 
+// Criando Classe Player
+class Player{
+    constructor(){
+        const geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
+        const material = new THREE.MeshBasicMaterial({color: 0xffffff});
+        const player = new THREE.Mesh(geometry, material);
+        scene.add(player);
+        
+        this.player = player;
+        player.position.x = 3;
+        player.position.y = 0;
+        player.position.z = 0;
+
+        this.playerInfo = {
+           positionX: 6,
+           velocity: 0
+        }
+    }
+
+    // Criando métodos anda, update e para
+    anda(){
+       this.playerInfo.velocity = 0.1; 
+    }
+    update(){
+        this.playerInfo.positionX -= this.playerInfo.velocity;
+
+        this.player.position.x= this.playerInfo.positionX
+    }
+    para(){
+        this.playerInfo.velocity = 0;
+    }
+}
+
+
 // Classe boneca
 class boneca{
     constructor(){
@@ -42,7 +76,11 @@ class boneca{
         gsap.to(this.Boneca1.rotation, {y: 0, duration: 1});
     }
 }
-// criando objeto boneca
+
+// criando player
+let Player1 = new Player();
+
+// criando boneca
 let Boneca1 = new boneca();
 
 // temporizador 
@@ -63,6 +101,7 @@ camera.position.z = 5;
 function animate(){
     requestAnimationFrame(animate); 
     renderer.render(scene, camera);
+    Player1.update();
 }
 animate();
 
@@ -75,3 +114,17 @@ function onWindowResize(){
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
+
+// ouvinte pra tecla seta esquerda
+window.addEventListener(`keydown`, function(e){
+    if(e.keyCode == 37){
+      Player1.anda();
+    }
+})
+
+// ouvinte pra parar quando o usuario soltar a tecla
+window.addEventListener(`keyup`, function(e){
+    if(e.keyCode == 37){
+      Player1.para();
+    }
+})
