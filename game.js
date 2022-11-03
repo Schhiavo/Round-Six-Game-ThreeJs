@@ -16,12 +16,27 @@ document.body.appendChild(renderer.domElement);
 // Modelo Boneca
 const loader = new THREE.GLTFLoader();
 
-// Dimencionando modelo
-loader.load("model/scene.gltf", function(gltf){
-    scene.add(gltf.scene);
-    gltf.scene.scale.set(0.4, 0.4, 0.4);
-    gltf.scene.position.set(0, -1, 0);
-})
+class boneca{
+    constructor(){
+        loader.load("model/scene.gltf", (gltf)=>{
+            scene.add(gltf.scene);
+            gltf.scene.scale.set(0.4, 0.4, 0.4);
+            gltf.scene.position.set(0, -1, 0);
+            this.Boneca1 = gltf.scene;
+        })
+    }
+    praTras(){
+        gsap.to(this.Boneca1.rotation, {y: -3.15, duration: 1});
+    }
+    praFrente(){
+        gsap.to(this.Boneca1.rotation, {y: 0, duration: 1});
+    }
+}
+
+let Boneca1 = new boneca();
+
+setTimeout(()=>{
+    Boneca1.praTras}, 1000);
 
 // adcionando brilho
 const light = new THREE.AmbientLight(0xffffff);
