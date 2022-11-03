@@ -16,6 +16,14 @@ document.body.appendChild(renderer.domElement);
 // Modelo Boneca
 const loader = new THREE.GLTFLoader();
 
+// Carregando a arvore
+loader.load("tree/scene.gltf", function(gltf){
+    scene.add(gltf.scene);
+    gltf.scene.scale.set(16, 16, 16);
+    gltf.scene.position.set(0, -6, -2);
+})
+
+// Classe boneca
 class boneca{
     constructor(){
         loader.load("model/scene.gltf", (gltf)=>{
@@ -25,16 +33,19 @@ class boneca{
             this.Boneca1 = gltf.scene;
         })
     }
+    // Boneca vira pra trás
     praTras(){
         gsap.to(this.Boneca1.rotation, {y: -3.15, duration: 1});
     }
+    // Boneca vira pra frente
     praFrente(){
         gsap.to(this.Boneca1.rotation, {y: 0, duration: 1});
     }
 }
-
+// criando objeto boneca
 let Boneca1 = new boneca();
 
+// temporizador 
 setTimeout(()=>{
     Boneca1.praTras}, 1000);
 
