@@ -1,28 +1,51 @@
-
+// Configuração da Cena 
 const scene = new THREE.Scene();
 
+// Camera
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
 
+// Renderizador
 const renderer = new THREE.WebGLRenderer();
 
+// Tamanho da tela(largura, altura)
 renderer.setSize(window.innerWidth, window.innerHeight);
 
+// Linkando o Renderizador
 document.body.appendChild(renderer.domElement);
 
-const geometry = new THREE.BoxGeometry();
+// Modelo Boneca
+const loader = new THREE.GLTFLoader();
 
-const material = new THREE.MeshBasicMaterial({color: 0x0ff0000});
+// Dimencionando modelo
+loader.load("model/scene.gltf", function(gltf){
+    scene.add(gltf.scene);
+    gltf.scene.scale.set(0.4, 0.4, 0.4);
+    gltf.scene.position.set(0, -1, 0);
+})
 
-const cube = new THREE.Mesh(geometry, material);
+// adcionando brilho
+const light = new THREE.AmbientLight(0xffffff);
+scene.add(light);
 
-scene.add(cube);
+// adicionando cor de fundo e ajustando opacidade
+renderer.setClearColor(0x8601af, 1);
 
+// Configurando a profundidade da camera
 camera.position.z = 5;
 
+// loop de renderização
 function animate(){
-    requestAnimationFrame(animate);
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+    requestAnimationFrame(animate); 
     renderer.render(scene, camera);
 }
 animate();
+
+// ouvinte para quando a aba for diminuida
+window.addEventListener(`resize`, onWindowResize, false);
+
+// função responsiva que vai ajusar a tela 
+function onWindowResize(){
+    camera.aespect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
