@@ -56,6 +56,10 @@ class Player{
     }
 }
 
+// função delay pra boneca
+function delay(ms){
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 // Classe boneca
 class boneca{
@@ -74,6 +78,15 @@ class boneca{
     // Boneca vira pra frente
     praFrente(){
         gsap.to(this.Boneca1.rotation, {y: 0, duration: 1});
+    }
+    
+    // Inicia a movimentação da boneca, utilizando a biblioteca Math para usar numero aleatorio no delay
+    async start(){
+        this.praTras();
+        await delay((Math.random()*1000)+1000);
+        this.praFrente();
+        await delay((Math.random()*1000)+1000);
+        this.start();
     }
 }
 
